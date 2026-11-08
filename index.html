@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111310">
+<title>Mixtape Metadata Assistant</title>
+<style>
+:root{color-scheme:dark;--bg:#111310;--panel:#191c18;--panel2:#20241f;--line:#30362e;--text:#f0f1e9;--muted:#a1a99c;--accent:#c5e0a6;--accent2:#d5c59b;--danger:#e6a5a5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -20%,#283126 0,transparent 45%),var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.shell{max-width:1100px;margin:auto;padding:38px 24px 70px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:54px}.brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.02em}.mark{width:38px;height:38px;border:1px solid #64765c;border-radius:12px;display:grid;place-items:center;color:var(--accent);font-size:20px}.smallcaps{font:11px ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.hero{max-width:740px;margin-bottom:34px}.hero h1{font-size:clamp(36px,6vw,60px);line-height:1.04;letter-spacing:-.055em;margin:12px 0 16px;font-weight:650}.hero p{max-width:630px;color:var(--muted);font-size:17px;margin:0}
+.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:18px;align-items:start}.panel{background:linear-gradient(145deg,#1b1f19,#171a16);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 16px 45px #0002}.panel h2{margin:0 0 4px;font-size:19px;letter-spacing:-.02em}.sub{color:var(--muted);font-size:13px;margin:0 0 20px}
+label{display:block;font-size:12px;color:#c5cabb;margin:15px 0 7px}input,select,textarea{width:100%;background:#11140f;color:var(--text);border:1px solid #3a4235;border-radius:10px;padding:12px 13px;font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:#9dbb7d;box-shadow:0 0 0 3px #a9c88a18}textarea{min-height:76px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:1px solid #4a5643;background:#263021;color:var(--text);padding:11px 16px;border-radius:10px;font-weight:650;cursor:pointer}.btn.primary{background:var(--accent);border-color:var(--accent);color:#172012}.btn.ghost{background:transparent;border-color:var(--line);color:#d4dacd}.btn:disabled{opacity:.5;cursor:wait}
+.note{font-size:12px;color:var(--muted);margin:13px 0 0}.resultbox{margin-top:16px;border-top:1px solid var(--line);padding-top:16px}.status{font-size:13px;color:var(--muted);min-height:20px}.result{padding:13px;border:1px solid var(--line);border-radius:12px;background:#121610;margin-top:10px}.result strong{display:block}.result small{color:var(--muted)}.result .actions{margin-top:10px}.coverline{display:flex;gap:12px;align-items:center}.cover{width:58px;height:58px;border-radius:9px;object-fit:cover;background:#2a3026}
+.sourcegrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.source{display:block;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#141812;font-size:13px}.source span{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.wide{grid-column:1/-1}
+.output{width:100%;min-height:230px;font:12px/1.55 ui-monospace,monospace;margin-top:12px}.footer{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:28px;color:var(--muted);font-size:12px}.pill{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:4px 9px;color:var(--muted);font-size:11px}
+@media(max-width:820px){.layout{grid-template-columns:1fr}.top{margin-bottom:38px}.shell{padding:24px 16px 50px}}
+@media(max-width:460px){.row,.formgrid,.sourcegrid{grid-template-columns:1fr}.wide{grid-column:auto}.panel{padding:17px}.hero h1{font-size:40px}}
+</style>
+</head>
+<body><main class="shell">
+<header class="top"><div class="brand"><div class="mark">♪</div><div>mixtape <span style="color:var(--muted);font-weight:400">/ metadata assistant</span></div></div><span class="pill">NO LOGIN · NO API KEYS</span></header>
+<section class="hero"><div class="smallcaps">YOUR PERSONAL MUSIC CATALOGUE TOOL</div><h1>Know the song.<br><span style="color:var(--accent)">Find the credits.</span></h1><p>Look up one song at a time, compare public sources, fill in the missing credits, and generate Blogger-ready metadata for Mixtape.</p></section>
+<div class="layout">
+<section class="panel">
+<h2>Find a song</h2><p class="sub">Enter the title as you know it, using English transliteration. Select the language to improve the search.</p>
+<label for="song">Song title</label><input id="song" placeholder="e.g. Varamanjaladiya" autocomplete="off">
+<div class="row"><div><label for="language">Language</label><select id="language"><option value="">Not sure / Any</option><option>Malayalam</option><option>Tamil</option><option>Hindi</option><option>Telugu</option><option>Kannada</option><option>Bengali</option><option>Marathi</option><option>Punjabi</option><option>Other</option></select></div><div><label for="hint">Extra clue (optional)</label><input id="hint" placeholder="Film, singer, decade…"></div></div>
+<div class="actions"><button class="btn primary" id="search">Search sources ↗</button><button class="btn ghost" id="clear">Clear</button></div>
+<div class="resultbox"><div class="status" id="status">Search opens relevant public catalogues and web results in separate tabs.</div><div id="apple"></div>
+<div class="sourcegrid" id="sources"></div></div>
+<p class="note">Search results are suggestions, not verified facts. Always check the song version and film before using credits.</p>
+</section>
+<section class="panel">
+<h2>Song metadata</h2><p class="sub">Fill or correct the fields. Only the details you enter will be included in the generated Blogger post.</p>
+<div class="formgrid">
+<div class="wide"><label for="title">Song title</label><input id="title" placeholder="Song title"></div>
+<div class="wide"><label for="artist">Singer(s)</label><input id="artist" placeholder="Separate multiple singers with commas"></div>
+<div><label for="composer">Music director</label><input id="composer" placeholder="Composer"></div>
+<div><label for="lyricist">Lyricist</label><input id="lyricist" placeholder="Lyricist"></div>
+<div><label for="film">Film</label><input id="film" placeholder="Film / album"></div>
+<div><label for="year">Year</label><input id="year" inputmode="numeric" placeholder="e.g. 1998"></div>
+<div><label for="duration">Duration</label><input id="duration" placeholder="e.g. 5:03"></div>
+<div><label for="languageOut">Language</label><input id="languageOut" placeholder="e.g. Malayalam"></div>
+<div class="wide"><label for="lyrics">Lyrics page URL</label><input id="lyrics" type="url" placeholder="https://…"></div>
+<div class="wide"><label for="audio">Audio URL</label><input id="audio" type="url" placeholder="https://…"></div>
+<div class="wide"><label for="artwork">Artwork image URL</label><input id="artwork" type="url" placeholder="https://…"></div>
+</div>
+<div class="actions"><button class="btn primary" id="generate">Generate Blogger HTML</button><button class="btn ghost" id="reset">Reset fields</button></div>
+<textarea id="output" class="output" spellcheck="false" placeholder="Your Blogger-ready HTML will appear here…"></textarea>
+<div class="actions"><button class="btn" id="copy">Copy HTML</button><button class="btn ghost" id="download">Download .html</button></div>
+<p class="note">Paste the generated HTML into the HTML view of a new Blogger post. Add/keep the cover image in the post body; Mixtape reads the first image from the post.</p>
+</section>
+</div>
+<footer class="footer"><span>Mixtape Metadata Assistant · An independent companion to Mixtape</span><span>Public sources only. No accounts or API keys.</span></footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const val=id=>$(id).value.trim();
+function seedTitle(){if(val("song"))$("title").value=val("song");if(val("language"))$("languageOut").value=val("language");}
+function makeSearchLinks(q,lang,hint){
+ const term=[q,lang,hint].filter(Boolean).join(" ");
+ const encoded=encodeURIComponent(term);
+ const exact=encodeURIComponent('"'+q+'"');
+ return [
+  ["Google — exact title","Search the wider web", "https://www.google.com/search?q="+exact+"+"+encodeURIComponent([lang,hint].filter(Boolean).join(" "))],
+  ["YouTube","Find song and film references","https://www.youtube.com/results?search_query="+encoded],
+  ["MSI · Malayalam","MalayalaSangeetham song database","https://www.google.com/search?q=site%3Amsidb.org+"+exact],
+  ["M3DB","Malayalam song and lyric references","https://www.google.com/search?q=site%3Am3db.com+"+exact],
+  ["MusicBrainz","International music database","https://musicbrainz.org/search?query="+encoded+"&type=recording&method=advanced"],
+  ["Apple Music catalogue","Track and album listings","https://music.apple.com/search?term="+encoded],
+  ["Wikipedia","Film / album context","https://en.wikipedia.org/w/index.php?search="+encoded]
+ ];
+}
+function search(){
+ const q=val("song");if(!q){$("status").textContent="Enter a song title first.";return}
+ seedTitle();const links=makeSearchLinks(q,val("language"),val("hint"));
+ $("sources").innerHTML=links.map((x,i)=>'<a class="source" target="_blank" rel="noopener noreferrer" href="'+x[2]+'">'+esc(x[0])+'<span>'+esc(x[1])+' ↗</span></a>').join("");
+ $("status").textContent="Opened source searches for “"+q+"”. Review matching versions and copy confirmed details into the editor.";
+ links.forEach(x=>window.open(x[2],"_blank","noopener"));
+ appleSearch(q);
+}
+async function appleSearch(q){
+ $("apple").innerHTML='<div class="status">Checking Apple’s public catalogue…</div>';
+ try{
+  const url="https://itunes.apple.com/search?term="+encodeURIComponent(q)+"&media=music&entity=song&limit=6&country=in";
+  const data=await new Promise((resolve,reject)=>{
+   const callback="itunesCB_"+Math.random().toString(36).slice(2);
+   const script=document.createElement("script");let timer=setTimeout(()=>{cleanup();reject(new Error("Timed out"))},9000);
+   function cleanup(){clearTimeout(timer);delete window[callback];script.remove()}
+   window[callback]=d=>{cleanup();resolve(d)};
+   script.onerror=()=>{cleanup();reject(new Error("Catalogue unavailable"))};
+   script.src=url+"&callback="+callback;document.body.appendChild(script);
+  });
+  if(!data.results||!data.results.length){$("apple").innerHTML='<div class="status">No Apple catalogue match for this title.</div>';return}
+  $("apple").innerHTML='<div class="smallcaps" style="margin:15px 0 8px">APPLE CATALOGUE · POSSIBLE MATCHES</div>'+data.results.map((r,i)=>'<article class="result"><div class="coverline">'+(r.artworkUrl100?'<img class="cover" src="'+esc(r.artworkUrl100)+'" alt="">':'')+'<div><strong>'+esc(r.trackName||"Unknown title")+'</strong><small>'+esc(r.artistName||"")+' · '+esc(r.collectionName||"")+' · '+(r.releaseDate?esc(r.releaseDate.slice(0,4)):"Year unavailable")+'</small></div></div><div class="actions"><button class="btn ghost" data-apple="'+i+'">Use available details</button><a class="btn ghost" target="_blank" rel="noopener" href="'+esc(r.trackViewUrl||"#")+'">Open listing ↗</a></div></article>').join("");
+  $("apple").querySelectorAll("[data-apple]").forEach(b=>b.addEventListener("click",()=>{const r=data.results[Number(b.dataset.apple)];$("title").value=r.trackName||val("song");$("artist").value=r.artistName||"";$("film").value=r.collectionName||"";$("year").value=r.releaseDate?r.releaseDate.slice(0,4):"";$("duration").value=r.trackTimeMillis?(()=>{let s=Math.round(r.trackTimeMillis/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")})():"";$("artwork").value=r.artworkUrl100||"";$("status").textContent="Apple listing details copied into the editor. Verify album versus film and check missing credits.";});
+ }catch(e){$("apple").innerHTML='<div class="status">Apple catalogue lookup could not be loaded in this browser. Use the public source links above instead.</div>'}
+}
+function makeHTML(){
+ const fields=[["data-artist","artist"],["data-music-director","composer"],["data-lyricist","lyricist"],["data-film","film"],["data-album","film"],["data-year","year"],["data-duration","duration"],["data-audio","audio"],["data-lyrics-url","lyrics"]];
+ const attrs=fields.map(([a,id])=>val(id)?a+'="'+esc(val(id))+'"':"").filter(Boolean).join(" ");
+ const title=val("title")||val("song")||"Untitled";
+ const img=val("artwork")?'<p><img src="'+esc(val("artwork"))+'" alt="'+esc(title)+' cover"></p>':"";
+ $("output").value='<div class="mixtape-data" '+attrs+'></div>\n'+img;
+}
+$("search").addEventListener("click",search);
+$("clear").addEventListener("click",()=>{$("song").value="";$("hint").value="";$("language").value="";$("sources").innerHTML="";$("apple").innerHTML="";$("status").textContent="Search cleared."});
+$("generate").addEventListener("click",makeHTML);
+$("reset").addEventListener("click",()=>["title","artist","composer","lyricist","film","year","duration","languageOut","lyrics","audio","artwork","output"].forEach(id=>$(id).value=""));
+$("copy").addEventListener("click",async()=>{if(!val("output"))makeHTML();try{await navigator.clipboard.writeText(val("output"));$("status").textContent="Blogger HTML copied to clipboard."}catch(e){$("output").select();$("status").textContent="Select and copy the HTML manually."}});
+$("download").addEventListener("click",()=>{if(!val("output"))makeHTML();const blob=new Blob([val("output")],{type:"text/html;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=(val("title")||"mixtape-song").replace(/[^a-z0-9]+/gi,"-").toLowerCase()+".html";a.click();URL.revokeObjectURL(a.href)});
+$("song").addEventListener("keydown",e=>{if(e.key==="Enter")search()});
+</script></body></html>
