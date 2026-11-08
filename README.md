@@ -11,7 +11,7 @@ A browser-based helper for checking public song references and preparing Blogger
 3. Check that each result refers to the right song and version. You can copy available details from an Apple result, then edit or complete the fields yourself.
 4. Add the credits and links you want to include, then select **Generate Blogger HTML**. Copy the result or download it as an HTML file, and paste it into Blogger’s HTML editor.
 
-The editor includes fields for singers, music director, lyricist, film or album, year, duration, lyrics URL, audio URL, and artwork URL. The generated Mixtape metadata block includes the available values; blank fields are left out. Artwork is added as the post’s first image so Mixtape can detect it.
+The editor includes fields for singers (separate multiple singers with commas), music director, lyricist, album or film, year, duration, lyrics URL, audio URL, and artwork URL. The generated Mixtape metadata block includes the available values; blank fields are left out. Artwork is added as the post’s first image so Mixtape can detect it.
 
 ## Check credits before publishing
 
