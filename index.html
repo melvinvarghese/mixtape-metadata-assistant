@@ -17,7 +17,7 @@
 <div><label for="duration">Duration</label><input id="duration" placeholder="e.g. 5:03"></div><div><label for="languageOut">Language</label><input id="languageOut"></div>
 <div class="wide"><label for="lyrics">Lyrics page URL</label><input id="lyrics" type="url" placeholder="https://…"></div><div class="wide"><label for="audio">Audio URL</label><input id="audio" type="url" placeholder="https://…"></div><div class="wide"><label for="artwork">Artwork image URL</label><input id="artwork" type="url" placeholder="https://…"></div></div>
 <div class="actions"><button class="btn primary" id="generate">Generate Blogger HTML</button><button class="btn ghost" id="reset">Reset fields</button></div><textarea id="output" class="output" spellcheck="false" placeholder="Generated Blogger HTML appears here…"></textarea><div class="actions"><button class="btn" id="copy">Copy HTML</button><button class="btn ghost" id="download">Download .html</button></div><p class="note">Paste into Blogger's HTML view. The artwork is inserted as the post's first image because Mixtape reads artwork from the first post image.</p></section></div>
-<footer class="footer"><span>Mixtape Metadata Assistant · companion to Mixtape</span><span>Public sources only · no account required</span></footer></main>
+<footer class="footer"><span>Mixtape Metadata Assistant · companion to <a href="https://melvinvarghese.github.io/mixtape/" target="_blank" rel="noopener noreferrer">Mixtape</a></span><span>Public sources only · no account required</span></footer></main>
 <script>
 const $=id=>document.getElementById(id),v=id=>$(id).value.trim();
 const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
