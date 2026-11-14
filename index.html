@@ -1,103 +1,109 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111310"><title>Mixtape Metadata Assistant</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f3ecdc"><title>Mixtape Metadata Assistant</title>
 <style>
-/* Tokens */
+/* Tokens: record-shop paper */
 :root{
-  color-scheme:dark;
-  --bg:#111310;--surface-input:#11140f;--surface-card:#121610;--surface-source:#141812;
-  --line:#30362e;--line-strong:#3a4235;--text:#f0f1e9;--muted:#a1a99c;--label:#c5cabb;
-  --accent:#c5e0a6;--accent-ink:#172012;--accent-line:#64765c;--warn:#d9b26a;
-  --btn-bg:#263021;--btn-line:#4a5643;
-  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;
-  --r-sm:10px;--r-lg:18px;
-  --fs-label:12px;--fs-small:13px;--fs-body:15px;
+  color-scheme:light;
+  --bg:#f3ecdc;--paper:#fffdf6;--ink:#1d1a16;--muted:#6b6252;--hint:#8a7f6a;
+  --line:#cfc5ad;--accent:#d9482b;--accent-deep:#b83a1e;--on-accent:#fffdf6;
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;
+  --fs-label:12px;--fs-small:13px;--fs-body:16px;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --ease:cubic-bezier(.2,.7,.2,1);
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:radial-gradient(ellipse at 80% -20%,#283126,transparent 45%),var(--bg);color:var(--text);font:var(--fs-body)/1.55 Inter,system-ui,sans-serif}
-a{color:var(--accent);text-decoration:none}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+body{margin:0;background:var(--bg);color:var(--ink);font:var(--fs-body)/1.55 var(--serif)}
+a{color:var(--accent-deep);text-decoration:underline;text-underline-offset:3px}
+::selection{background:var(--accent);color:var(--on-accent)}
+:focus-visible{outline:2px solid var(--accent-deep);outline-offset:3px}
 
 /* Shell and header */
 .shell{max-width:1100px;margin:auto;padding:var(--s6) var(--s5) 72px}
-.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s3);margin-bottom:var(--s6)}
-.brand{font-weight:700}
-.mark{display:inline-grid;place-items:center;border:1px solid var(--accent-line);color:var(--accent);border-radius:var(--r-sm);width:36px;height:36px;margin-right:var(--s3)}
-.pill{border:1px solid var(--line);border-radius:20px;padding:var(--s1) var(--s3);color:var(--muted);font-size:var(--fs-label);white-space:nowrap}
-.small{font:var(--fs-label)/1.4 var(--mono);letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
-.step{color:var(--accent);margin-bottom:var(--s2)}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s3);margin-bottom:var(--s6);padding-bottom:var(--s3);border-bottom:1.5px solid var(--ink)}
+.brand{font-size:22px;font-style:italic;font-weight:400}
+.brand>span:not(.mark){font:var(--fs-label)/1.4 var(--mono);font-style:normal;letter-spacing:.08em;text-transform:uppercase}
+.mark{display:inline-grid;place-items:center;border:1.5px solid var(--ink);color:var(--ink);border-radius:50%;width:34px;height:34px;margin-right:var(--s3);font-style:normal}
+.pill{color:var(--muted);font:var(--fs-label)/1.4 var(--mono);letter-spacing:.08em;white-space:nowrap}
+.small{font:var(--fs-label)/1.4 var(--mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.step{color:var(--accent-deep);margin-bottom:var(--s2)}
 
-/* Compact hero: same message, less height */
-.hero{max-width:720px;margin-bottom:var(--s5)}
-.hero h1{font-size:clamp(28px,4.2vw,44px);line-height:1.1;letter-spacing:-.04em;margin:var(--s2) 0 var(--s3)}
+/* Hero */
+.hero{max-width:760px;margin-bottom:var(--s6)}
+.hero h1{font-weight:400;font-size:clamp(30px,4.8vw,50px);line-height:1.08;letter-spacing:-.015em;margin:var(--s2) 0 var(--s3)}
+.hero h1 span{font-style:italic}
 .hero p,.sub,.note{color:var(--muted)}
-.hero p{font-size:16px;max-width:60ch;margin:0}
+.hero p{font-size:17px;max-width:58ch;margin:0}
 
-/* Layout: search column leads, editor stays in view */
-.layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:var(--s4);align-items:start}
-.panel{background:linear-gradient(145deg,#1b1f19,#171a16);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s5)}
-.panel h2{margin:0;font-size:19px;line-height:1.3}
-.sub{font-size:var(--fs-small);margin:var(--s1) 0 var(--s4)}
+/* Layout: two open columns on the paper */
+.layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:var(--s7);align-items:start}
+.panel{position:relative;padding:0}
+.panel h2{margin:0;font-size:24px;font-weight:400;line-height:1.25}
+.sub{font-size:15px;font-style:italic;margin:var(--s1) 0 var(--s3)}
+.stamp{position:absolute;right:0;top:-4px;transform:rotate(-6deg);border:2px solid var(--accent-deep);color:var(--accent-deep);padding:1px var(--s3);font:var(--fs-label)/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;pointer-events:none}
 @media(min-width:801px) and (min-height:900px){.layout>.panel:last-child{position:sticky;top:var(--s5)}}
 
-/* Forms */
-label{display:block;font-size:var(--fs-label);color:var(--label);margin:var(--s4) 0 var(--s2)}
-input,select,textarea{width:100%;background:var(--surface-input);color:var(--text);border:1px solid var(--line-strong);border-radius:var(--r-sm);padding:var(--s3);font:inherit;outline:none;transition:border-color .15s var(--ease),box-shadow .15s var(--ease)}
-input:focus,select:focus,textarea:focus{border-color:#9dbb7d;box-shadow:0 0 0 3px rgba(197,224,166,.16)}
-.row,.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--s3)}
+/* Fields: ruled lines, like a catalogue card */
+label{display:block;font:var(--fs-label)/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:var(--s4) 0 var(--s1)}
+input,select,textarea{width:100%;background:transparent;color:var(--ink);border:0;border-bottom:1.5px solid var(--ink);border-radius:0;padding:var(--s1) 0 6px;font:inherit;outline:none;transition:border-color .15s var(--ease),box-shadow .15s var(--ease)}
+input::placeholder,textarea::placeholder{color:var(--hint);font-style:italic}
+input:focus,select:focus{border-bottom-color:var(--accent-deep);box-shadow:0 1.5px 0 var(--accent-deep)}
+select{cursor:pointer}
+.row,.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--s5)}
 .wide{grid-column:1/-1}
 
-/* Buttons: one primary per step, everything else quieter */
-.actions{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s4)}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;background:var(--btn-bg);border:1px solid var(--btn-line);color:var(--text);padding:var(--s2) var(--s4);border-radius:var(--r-sm);font:inherit;font-weight:650;line-height:1.2;cursor:pointer;transition:background-color .15s var(--ease),border-color .15s var(--ease),color .15s var(--ease),transform .1s var(--ease)}
-.btn:active{transform:scale(.98)}
-.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.ghost{background:transparent;border-color:var(--line);color:var(--muted)}
+/* Buttons: tomato primary, outlined secondary, underlined links */
+.actions{display:flex;gap:var(--s3) var(--s4);flex-wrap:wrap;align-items:center;margin-top:var(--s5)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;background:transparent;border:1.5px solid var(--ink);color:var(--ink);padding:var(--s2) var(--s4);border-radius:0;font:600 var(--fs-small)/1.2 var(--mono);cursor:pointer;transition:background-color .15s var(--ease),border-color .15s var(--ease),color .15s var(--ease),transform .1s var(--ease)}
+.btn:active{transform:translateY(1px)}
+.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.ghost{border-color:transparent;padding-left:0;padding-right:0;text-decoration:underline;text-underline-offset:4px}
 @media(hover:hover){
-  .btn:hover{border-color:var(--accent-line)}
-  .primary:hover{filter:brightness(1.07)}
-  .ghost:hover{color:var(--text);border-color:var(--btn-line)}
-  .source:hover{border-color:var(--accent-line);background:#171c14}
+  .btn:hover{background:var(--ink);color:var(--paper)}
+  .primary:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
+  .ghost:hover{background:transparent;color:var(--accent-deep)}
+  .source:hover{border-color:var(--ink)}
 }
-.note{font-size:var(--fs-label);line-height:1.5}
-.status{color:var(--muted);font-size:var(--fs-small);margin-top:var(--s4);min-height:20px}
+.note{font-size:var(--fs-small);font-style:italic;line-height:1.5}
+.status{color:var(--muted);font:var(--fs-label)/1.5 var(--mono);margin-top:var(--s4);min-height:20px}
 
-/* Sources: denser grid */
-.sourcegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--s2);margin-top:var(--s4)}
-.source{display:block;border:1px solid var(--line);border-radius:var(--r-sm);padding:10px var(--s3);background:var(--surface-source);font-size:var(--fs-small);transition:border-color .15s var(--ease),background-color .15s var(--ease)}
-.source span{display:block;color:var(--muted);font-size:var(--fs-label)}
+/* Sources: small paper slips */
+.sourcegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--s2);margin:var(--s5) 0 var(--s4)}
+.source{display:block;border:1px solid var(--line);background:var(--paper);padding:10px var(--s3);color:var(--ink);text-decoration:none;font-size:var(--fs-small);transition:border-color .15s var(--ease)}
+.source span{display:block;color:var(--muted);font:var(--fs-label)/1.4 var(--mono);margin-top:2px}
 
-/* Result cards: compact rows */
-.result{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);padding:10px var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);margin-top:var(--s2);background:var(--surface-card);animation:rise .18s var(--ease) both}
+/* Results: index cards */
+.result{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);padding:10px var(--s3);background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--accent);margin-top:var(--s3);animation:rise .18s var(--ease) both}
 .coverline{display:flex;gap:var(--s3);align-items:center;min-width:0;flex:1}
 .coverline>div{min-width:0}
-.cover{width:48px;height:48px;flex:none;object-fit:cover;border-radius:8px}
-.result small{display:block;color:var(--muted);font-size:var(--fs-label);line-height:1.4}
-.result .actions{margin-top:0;flex-wrap:nowrap;flex:none}
-.result .btn{min-height:32px;padding:6px 10px;font-size:var(--fs-small)}
-.result .ghost{border-color:transparent}
-.result [data-use]{background:var(--btn-bg);border-color:var(--btn-line);color:var(--text)}
-#apple .note,#jiosaavn .note,#musicbrainz .note{border-left:2px solid var(--warn);padding-left:var(--s3)}
+.coverline b{font-weight:400;font-size:17px;line-height:1.3}
+.cover{width:48px;height:48px;flex:none;object-fit:cover;border:1px solid var(--line)}
+.result small{display:block;color:var(--muted);font:var(--fs-label)/1.45 var(--mono)}
+.result .actions{margin-top:0;flex-wrap:nowrap;flex:none;gap:var(--s3)}
+.result .btn{min-height:32px;padding:4px 0;font-size:var(--fs-label);white-space:nowrap}
+.result [data-use]{color:var(--accent-deep);text-decoration:underline;text-underline-offset:4px}
+.result [data-use]::after{content:" \2192"}
+@media(hover:hover){.result [data-use]:hover{color:var(--ink)}}
+#apple .note,#jiosaavn .note,#musicbrainz .note{border-left:2px solid var(--accent-deep);padding-left:var(--s3)}
 
-/* Output */
-.output{min-height:180px;margin-top:var(--s3);font:var(--fs-label)/1.5 var(--mono);resize:vertical}
+/* Output: a stamped label */
+.output{min-height:180px;margin-top:var(--s3);padding:var(--s3);background:var(--paper);border:1.5px dashed var(--ink);font:var(--fs-label)/1.55 var(--mono);resize:vertical}
+.output:focus{border-color:var(--accent-deep);box-shadow:none}
 
-.footer{margin-top:var(--s6);color:var(--muted);font-size:var(--fs-label);display:flex;justify-content:space-between;gap:var(--s3);flex-wrap:wrap}
+.footer{margin-top:var(--s7);padding-top:var(--s3);border-top:1.5px solid var(--ink);color:var(--muted);font:var(--fs-label)/1.5 var(--mono);display:flex;justify-content:space-between;gap:var(--s3);flex-wrap:wrap}
 
 @keyframes rise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
 /* Responsive */
-@media(max-width:800px){.layout{grid-template-columns:1fr}}
+@media(max-width:800px){.layout{grid-template-columns:1fr;gap:var(--s6)}}
 @media(max-width:600px){
   input,select,textarea{font-size:16px}
   .result{flex-direction:column;align-items:stretch}
   .result .actions{margin-top:var(--s2)}
 }
 @media(max-width:460px){
-  .shell{padding:22px 14px 48px}
-  .panel{padding:var(--s4)}
+  .shell{padding:22px 16px 48px}
   .row,.formgrid,.sourcegrid{grid-template-columns:1fr}
   .wide{grid-column:auto}
   .top{margin-bottom:var(--s5)}
@@ -116,7 +122,7 @@ input:focus,select:focus,textarea:focus{border-color:#9dbb7d;box-shadow:0 0 0 3p
 <label for="song">Song title</label><input id="song" placeholder="e.g. Varamanjaladiya" autocomplete="off">
 <div class="row"><div><label for="language">Language</label><select id="language"><option value="">Any / Not sure</option><option>Malayalam</option><option>Tamil</option><option>Hindi</option><option>Telugu</option><option>Kannada</option><option>Bengali</option><option>Marathi</option><option>Punjabi</option><option>Other</option></select></div><div><label for="hint">Extra clue</label><input id="hint" placeholder="Film, singer, decade…"></div></div>
 <div class="actions"><button class="btn primary" id="search">Search sources ↗</button><button class="btn ghost" id="clear">Clear</button></div><div class="status" id="status">Live catalogue matches from Apple Music, JioSaavn and MusicBrainz appear here. Other services are available as search links.</div><div id="apple"></div><div id="jiosaavn"></div><div id="musicbrainz"></div><div class="sourcegrid" id="sources"></div><p class="note">A title match is not proof. Check the version, film, singer and credits before accepting details.</p></section>
-<section class="panel"><div class="small step">Step 2 · Fill and export</div><h2>Song metadata</h2><p class="sub">Fill or correct the details. Missing fields are left blank.</p>
+<section class="panel"><div class="small step">Step 2 · Fill and export</div><div class="stamp" aria-hidden="true">check credits</div><h2>Song metadata</h2><p class="sub">Fill or correct the details. Missing fields are left blank.</p>
 <div class="formgrid">
 <div class="wide"><label for="title">Song title</label><input id="title"></div><div class="wide"><label for="artist">Singer(s)</label><input id="artist" placeholder="Separate multiple singers with commas"></div>
 <div><label for="composer">Music director</label><input id="composer"></div><div><label for="lyricist">Lyricist</label><input id="lyricist"></div>
@@ -131,11 +137,11 @@ const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 function linksFor(q,lang,hint){const term=[q,lang,hint].filter(Boolean).join(" "),enc=encodeURIComponent(term),exact=encodeURIComponent('"'+q+'"');return[["Spotify","Search tracks and albums","https://open.spotify.com/search/"+enc],["YouTube","Videos and lyric videos","https://www.youtube.com/results?search_query="+enc],["YouTube Music","Search music catalogue","https://music.youtube.com/search?q="+enc],["JioSaavn","Indian music catalogue","https://www.jiosaavn.com/search/"+enc],["Gaana","Indian music catalogue","https://gaana.com/search/"+enc],["Amazon Music","Search tracks and albums","https://music.amazon.in/search/"+enc],["MusicBrainz","Open music metadata database","https://musicbrainz.org/search?query="+enc+"&type=recording&method=advanced"],["Apple Music","Track and album listings","https://music.apple.com/search?term="+enc],["MalayalaSangeetham","Malayalam song database","https://www.google.com/search?q=site%3Amsidb.org+"+exact],["M3DB","Malayalam song references","https://www.google.com/search?q=site%3Am3db.com+"+exact],["Google","Search the wider web","https://www.google.com/search?q="+exact+"+"+encodeURIComponent([lang,hint].filter(Boolean).join(" "))]]}
 function sourceHeading(name,detail){return '<div class="small" style="margin:16px 0 7px">'+esc(name)+' · '+esc(detail)+'</div>'}
 function resultCard(r,i){return '<article class="result"><div class="coverline">'+(r.image?'<img class="cover" src="'+esc(r.image)+'" alt="" loading="lazy">':'')+'<div><b>'+esc(r.title||"Unknown title")+'</b><small>'+esc(r.artist||"Artist unknown")+' · '+esc(r.album||"Album unknown")+' · '+esc(r.year||"Year unknown")+'</small></div></div><div class="actions"><button class="btn ghost" data-use="'+i+'">Use these details</button>'+(r.url?'<a class="btn ghost" href="'+esc(r.url)+'" target="_blank" rel="noopener">Open listing ↗</a>':'')+'</div></article>'}
-function applyTrack(r){clearMetadataFields();$("title").value=r.title||v("song");$("artist").value=r.artist||"";$("film").value=r.album||"";$("year").value=r.year||"";$("duration").value=r.duration||"";$("artwork").value=r.artwork||r.image||"";$("status").textContent="Copied "+r.source+" details into the editor. Verify the film/album and fill in missing credits."}
+function applyTrack(r){const lang=v("languageOut")||searchLang();clearMetadataFields();$("languageOut").value=lang;$("title").value=r.title||v("song");$("artist").value=r.artist||"";$("film").value=r.album||"";$("year").value=r.year||"";$("duration").value=r.duration||"";$("artwork").value=r.artwork||r.image||"";$("status").textContent="Copied "+r.source+" details into the editor. Verify the film/album and fill in missing credits."}
 async function jiosaavn(q){const box=$("jiosaavn");box.innerHTML=sourceHeading("JIOSAAVN","Searching Indian music catalogue…");try{const response=await fetch("https://saavn.dev/api/search/songs?query="+encodeURIComponent(q)+"&limit=5");if(!response.ok)throw Error();const data=await response.json(),items=data.data?.results||data.results||[];if(!items.length){box.innerHTML=sourceHeading("JIOSAAVN","No matches found");return}window.jiosaavnResults=items.map(x=>({title:x.name||x.title,artist:(x.artists?.primary||x.primary_artists||[]).map(a=>a.name).join(", ")||x.artist||"",album:x.album?.name||x.album||"",year:String(x.year||x.releaseDate||"").slice(0,4),duration:x.duration?Math.floor(Number(x.duration)/60)+":"+String(Number(x.duration)%60).padStart(2,"0"):"",image:x.image?.[x.image.length-1]?.url||x.image?.[x.image.length-1]?.link||"",url:x.url||x.perma_url||"",source:"JioSaavn"}));box.innerHTML=sourceHeading("JIOSAAVN","POSSIBLE MATCHES")+window.jiosaavnResults.map(resultCard).join("");box.querySelectorAll("[data-use]").forEach(b=>b.onclick=()=>applyTrack(window.jiosaavnResults[+b.dataset.use]))}catch(e){box.innerHTML=sourceHeading("JIOSAAVN","Live lookup unavailable")+'<p class="note">The community search service may be unavailable. Use the JioSaavn search link below.</p>'}}
 async function musicbrainz(q){const box=$("musicbrainz");box.innerHTML=sourceHeading("MUSICBRAINZ","Searching open music database…");try{const response=await fetch("https://musicbrainz.org/ws/2/recording/?query="+encodeURIComponent(q)+"&fmt=json&limit=5");if(!response.ok)throw Error();const data=await response.json(),items=data.recordings||[];if(!items.length){box.innerHTML=sourceHeading("MUSICBRAINZ","No matches found");return}window.musicbrainzResults=items.map(x=>({title:x.title,artist:(x["artist-credit"]||[]).map(a=>a.name||a.artist?.name||"").filter(Boolean).join(", "),album:x.releases?.[0]?.title||"",year:(x["first-release-date"]||"").slice(0,4),duration:x.length?Math.floor(x.length/60000)+":"+String(Math.floor(x.length/1000)%60).padStart(2,"0"):"",image:"",url:"https://musicbrainz.org/recording/"+x.id,source:"MusicBrainz"}));box.innerHTML=sourceHeading("MUSICBRAINZ","POSSIBLE RECORDING MATCHES")+window.musicbrainzResults.map(resultCard).join("");box.querySelectorAll("[data-use]").forEach(b=>b.onclick=()=>applyTrack(window.musicbrainzResults[+b.dataset.use]))}catch(e){box.innerHTML=sourceHeading("MUSICBRAINZ","Live lookup unavailable")+'<p class="note">The database may be rate-limiting this request. Use its search link below.</p>'}}
 async function apple(q){$("apple").innerHTML='<div class="status">Checking Apple public catalogue…</div>';try{const data=await new Promise((ok,no)=>{const cb="it_"+Math.random().toString(36).slice(2),s=document.createElement("script"),timer=setTimeout(()=>{clean();no(Error())},9000);function clean(){clearTimeout(timer);delete window[cb];s.remove()}window[cb]=d=>{clean();ok(d)};s.onerror=()=>{clean();no(Error())};s.src="https://itunes.apple.com/search?term="+encodeURIComponent(q)+"&media=music&entity=song&limit=6&country=in&callback="+cb;document.body.appendChild(s)});if(!data.results?.length){$("apple").innerHTML=sourceHeading("APPLE MUSIC","No matches found");return}window.appleResults=data.results.map(r=>({title:r.trackName,artist:r.artistName,album:r.collectionName,year:r.releaseDate?.slice(0,4)||"",duration:r.trackTimeMillis?(()=>{const s=Math.round(r.trackTimeMillis/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")})():"",image:r.artworkUrl100||"",artwork:(r.artworkUrl100||"").replace(/\/\d+x\d+bb\.(jpg|png)$/i,"/600x600bb.$1"),url:r.trackViewUrl||"",source:"Apple Music"}));$("apple").innerHTML=sourceHeading("APPLE MUSIC","POSSIBLE MATCHES")+window.appleResults.map(resultCard).join("");$("apple").querySelectorAll("[data-use]").forEach(b=>b.onclick=()=>applyTrack(window.appleResults[+b.dataset.use]))}catch(e){$("apple").innerHTML=sourceHeading("APPLE MUSIC","Lookup unavailable")+'<p class="note">Use the Apple Music search link below.</p>'}}
-const metadataFieldIds=["title","artist","composer","lyricist","film","year","duration","languageOut","lyrics","audio","artwork","output"];function clearMetadataFields(){metadataFieldIds.forEach(id=>$(id).value="")}function search(){const q=v("song");if(!q){$("status").textContent="Enter a song title first.";return}clearMetadataFields();$("title").value=q;if(v("language"))$("languageOut").value=v("language");const term=[q,v("language"),v("hint")].filter(Boolean).join(" ");const links=linksFor(q,v("language"),v("hint"));$("sources").innerHTML=links.map(x=>'<a class="source" href="'+x[2]+'" target="_blank" rel="noopener">'+esc(x[0])+'<span>'+esc(x[1])+' ↗</span></a>').join("");$("status").textContent="Searching live catalogues. Search links for other services are below.";apple(q);jiosaavn(term);musicbrainz(term)}
+const metadataFieldIds=["title","artist","composer","lyricist","film","year","duration","languageOut","lyrics","audio","artwork","output"];function clearMetadataFields(){metadataFieldIds.forEach(id=>$(id).value="")}function searchLang(){const l=v("language");return l==="Other"?"":l}function search(){const q=v("song");if(!q){$("status").textContent="Enter a song title first.";return}clearMetadataFields();$("title").value=q;const lang=searchLang();if(lang)$("languageOut").value=lang;const term=[q,lang,v("hint")].filter(Boolean).join(" ");const links=linksFor(q,lang,v("hint"));$("sources").innerHTML=links.map(x=>'<a class="source" href="'+x[2]+'" target="_blank" rel="noopener">'+esc(x[0])+'<span>'+esc(x[1])+' ↗</span></a>').join("");$("status").textContent="Searching live catalogues. Search links for other services are below.";apple(q);jiosaavn(term);musicbrainz(term)}
 function cleanAlbumName(value){return String(value||"").replace(/\s*\(?\s*Original Motion Picture Soundtrack\s*\)?\s*/ig," ").replace(/\s+/g," ").trim()}
 function trackedLyricsUrl(value){if(!value)return"";try{const url=new URL(value);url.searchParams.set("utm_source","melvinvarghese.in");return url.href}catch{return value}}
 function generate(){const fields=[["data-artist","artist"],["data-music-director","composer"],["data-lyricist","lyricist"],["data-album","film"],["data-year","year"],["data-duration","duration"],["data-language","languageOut"],["data-audio","audio"],["data-lyrics-url","lyrics"]];const attrs=fields.map(([a,id])=>{let value=v(id);if(id==="film")value=cleanAlbumName(value);if(id==="lyrics")value=trackedLyricsUrl(value);return value?a+'="'+esc(value)+'"':""}).filter(Boolean).join(" ");const title=v("title")||v("song")||"Untitled";const img=v("artwork")?'<p><img src="'+esc(v("artwork"))+'" alt="'+esc(title)+' cover"></p>':"";$("output").value='<div class="mixtape-data" '+attrs+'></div>\n'+img}

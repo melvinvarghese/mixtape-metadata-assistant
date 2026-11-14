@@ -1,22 +1,41 @@
 # Mixtape Metadata Assistant
 
-A browser-based helper for checking public song references and preparing Blogger-ready metadata for Mixtape.
+A small web page for looking up a song and preparing the metadata block that [Mixtape](https://melvinvarghese.github.io/mixtape/) reads from a Blogger post.
 
-**[Open the web app](https://melvinvarghese.github.io/mixtape-metadata-assistant/)**
+Open it here: https://melvinvarghese.github.io/mixtape-metadata-assistant/
 
-## How to use it
+It is a single `index.html` file. There is no build step, no server, no account and no API key.
 
-1. Enter a song title in English transliteration. Choose a language and add an optional clue, such as a film, singer, or decade.
-2. Select **Search sources**. Searches open for Google, YouTube, MalayalaSangeetham, M3DB, MusicBrainz, Apple Music, and Wikipedia. Possible Apple catalogue matches appear in the app when available.
-3. Check that each result refers to the right song and version. You can copy available details from an Apple result, then edit or complete the fields yourself.
-4. Add the credits and links you want to include, then select **Generate Blogger HTML**. Copy the result or download it as an HTML file, and paste it into Blogger’s HTML editor.
+## Using it
 
-The editor includes fields for singers (separate multiple singers with commas), music director, lyricist, album or film, year, duration, lyrics URL, audio URL, and artwork URL. The generated Mixtape metadata block includes the available values; blank fields are left out. Artwork is added as the post’s first image so Mixtape can detect it.
+1. Type the song title in English letters. Pick a language if you know it, and add a clue such as the film, a singer or the decade.
+2. Press **Search sources**. The page does two things:
+   - It looks up possible matches on Apple Music, JioSaavn and MusicBrainz and lists them as cards.
+   - It builds search links for Spotify, YouTube, YouTube Music, JioSaavn, Gaana, Amazon Music, MusicBrainz, Apple Music and Google. MalayalaSangeetham (msidb.org) and M3DB are searched through Google.
+3. Open the sources and check that they describe the right song and the right version. If a card looks right, press **Use these details** to copy its title, singer, album, year, duration and cover into the form.
+4. Fill in what is still missing: music director, lyricist, lyrics page, audio link. None of the lookups return these.
+5. Press **Generate Blogger HTML**, then copy it or download it, and paste it into Blogger's HTML view.
 
-## Check credits before publishing
+## What it generates
 
-Search results and Apple catalogue matches are clues, not verified credits. Catalogue listings may help identify a track or album, but they may not establish the original film, music director, or lyricist. Confirm the song version and credits against reliable sources before publishing.
+```html
+<div class="mixtape-data" data-artist="..." data-music-director="..." data-album="..." data-year="..."></div>
+<p><img src="..." alt="... cover"></p>
+```
 
-## Access and data
+- Fields left empty are left out.
+- The cover goes in as the first image of the post, because Mixtape takes artwork from there.
+- For Apple results the cover link is changed to the 600 x 600 version.
+- "Original Motion Picture Soundtrack" is dropped from album names.
+- `utm_source=melvinvarghese.in` is added to the lyrics page link.
+- Singers are separated by commas.
 
-The app requires no account, API key, or paid service. Searches open public source pages, and the app checks Apple’s public iTunes Search API for possible track matches. Search terms are sent to those services when you use them. The app has no server-side account or database.
+## Check the credits
+
+A title match is not proof. Catalogue listings often have the wrong film, a remaster, or no music director or lyricist at all. Compare more than one source before you publish.
+
+## Privacy
+
+Whatever you type in the search box is sent to Apple (iTunes Search), JioSaavn, MusicBrainz and the search sites you open. Nothing is stored by this page.
+
+JioSaavn results come from a community API (`saavn.dev`) that is not official and can be down. MusicBrainz can rate-limit requests. When a lookup fails, the page says so and the search links still work.
