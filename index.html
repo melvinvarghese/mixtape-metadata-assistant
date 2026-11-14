@@ -1,15 +1,122 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111310"><title>Mixtape Metadata Assistant</title>
 <style>
-:root{color-scheme:dark;--bg:#111310;--panel:#191c18;--line:#30362e;--text:#f0f1e9;--muted:#a1a99c;--accent:#c5e0a6}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -20%,#283126,transparent 45%),var(--bg);color:var(--text);font:15px/1.55 Inter,system-ui,sans-serif}a{color:var(--accent);text-decoration:none}.shell{max-width:1100px;margin:auto;padding:38px 24px 70px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:54px}.brand{font-weight:700}.mark{display:inline-grid;place-items:center;border:1px solid #64765c;color:var(--accent);border-radius:10px;width:36px;height:36px;margin-right:10px}.pill{border:1px solid var(--line);border-radius:20px;padding:4px 10px;color:var(--muted);font-size:11px}.small{font:11px ui-monospace,monospace;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}.hero{max-width:700px;margin-bottom:32px}.hero h1{font-size:clamp(38px,6vw,60px);line-height:1.04;letter-spacing:-.05em;margin:12px 0}.hero p,.sub,.note{color:var(--muted)}.hero p{font-size:17px}.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}.panel{background:linear-gradient(145deg,#1b1f19,#171a16);border:1px solid var(--line);border-radius:18px;padding:22px}.panel h2{margin:0;font-size:19px}.sub{font-size:13px;margin:3px 0 18px}label{display:block;font-size:12px;color:#c5cabb;margin:14px 0 6px}input,select,textarea{width:100%;background:#11140f;color:var(--text);border:1px solid #3a4235;border-radius:10px;padding:11px 12px;font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:#9dbb7d}.row,.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.wide{grid-column:1/-1}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.btn{background:#263021;border:1px solid #4a5643;color:var(--text);padding:10px 14px;border-radius:9px;font-weight:650;cursor:pointer}.primary{background:var(--accent);color:#172012;border-color:var(--accent)}.ghost{background:transparent;border-color:var(--line)}.note{font-size:12px}.status{color:var(--muted);font-size:13px;margin-top:15px;min-height:20px}.sourcegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.source{border:1px solid var(--line);border-radius:9px;padding:10px;background:#141812;font-size:13px}.source span{display:block;color:var(--muted);font-size:11px}.result{padding:12px;border:1px solid var(--line);border-radius:10px;margin-top:9px;background:#121610}.coverline{display:flex;gap:12px;align-items:center}.cover{width:54px;height:54px;object-fit:cover;border-radius:8px}.result small{display:block;color:var(--muted)}.output{min-height:180px;margin-top:12px;font:12px/1.5 ui-monospace,monospace}.footer{margin-top:28px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}@media(max-width:800px){.layout{grid-template-columns:1fr}}@media(max-width:460px){.shell{padding:22px 14px 45px}.panel{padding:16px}.row,.formgrid,.sourcegrid{grid-template-columns:1fr}.wide{grid-column:auto}.top{margin-bottom:38px}}
+/* Tokens */
+:root{
+  color-scheme:dark;
+  --bg:#111310;--surface-input:#11140f;--surface-card:#121610;--surface-source:#141812;
+  --line:#30362e;--line-strong:#3a4235;--text:#f0f1e9;--muted:#a1a99c;--label:#c5cabb;
+  --accent:#c5e0a6;--accent-ink:#172012;--accent-line:#64765c;--warn:#d9b26a;
+  --btn-bg:#263021;--btn-line:#4a5643;
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;
+  --r-sm:10px;--r-lg:18px;
+  --fs-label:12px;--fs-small:13px;--fs-body:15px;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:radial-gradient(ellipse at 80% -20%,#283126,transparent 45%),var(--bg);color:var(--text);font:var(--fs-body)/1.55 Inter,system-ui,sans-serif}
+a{color:var(--accent);text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Shell and header */
+.shell{max-width:1100px;margin:auto;padding:var(--s6) var(--s5) 72px}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s3);margin-bottom:var(--s6)}
+.brand{font-weight:700}
+.mark{display:inline-grid;place-items:center;border:1px solid var(--accent-line);color:var(--accent);border-radius:var(--r-sm);width:36px;height:36px;margin-right:var(--s3)}
+.pill{border:1px solid var(--line);border-radius:20px;padding:var(--s1) var(--s3);color:var(--muted);font-size:var(--fs-label);white-space:nowrap}
+.small{font:var(--fs-label)/1.4 var(--mono);letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.step{color:var(--accent);margin-bottom:var(--s2)}
+
+/* Compact hero: same message, less height */
+.hero{max-width:720px;margin-bottom:var(--s5)}
+.hero h1{font-size:clamp(28px,4.2vw,44px);line-height:1.1;letter-spacing:-.04em;margin:var(--s2) 0 var(--s3)}
+.hero p,.sub,.note{color:var(--muted)}
+.hero p{font-size:16px;max-width:60ch;margin:0}
+
+/* Layout: search column leads, editor stays in view */
+.layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:var(--s4);align-items:start}
+.panel{background:linear-gradient(145deg,#1b1f19,#171a16);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s5)}
+.panel h2{margin:0;font-size:19px;line-height:1.3}
+.sub{font-size:var(--fs-small);margin:var(--s1) 0 var(--s4)}
+@media(min-width:801px) and (min-height:900px){.layout>.panel:last-child{position:sticky;top:var(--s5)}}
+
+/* Forms */
+label{display:block;font-size:var(--fs-label);color:var(--label);margin:var(--s4) 0 var(--s2)}
+input,select,textarea{width:100%;background:var(--surface-input);color:var(--text);border:1px solid var(--line-strong);border-radius:var(--r-sm);padding:var(--s3);font:inherit;outline:none;transition:border-color .15s var(--ease),box-shadow .15s var(--ease)}
+input:focus,select:focus,textarea:focus{border-color:#9dbb7d;box-shadow:0 0 0 3px rgba(197,224,166,.16)}
+.row,.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--s3)}
+.wide{grid-column:1/-1}
+
+/* Buttons: one primary per step, everything else quieter */
+.actions{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s4)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;background:var(--btn-bg);border:1px solid var(--btn-line);color:var(--text);padding:var(--s2) var(--s4);border-radius:var(--r-sm);font:inherit;font-weight:650;line-height:1.2;cursor:pointer;transition:background-color .15s var(--ease),border-color .15s var(--ease),color .15s var(--ease),transform .1s var(--ease)}
+.btn:active{transform:scale(.98)}
+.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.ghost{background:transparent;border-color:var(--line);color:var(--muted)}
+@media(hover:hover){
+  .btn:hover{border-color:var(--accent-line)}
+  .primary:hover{filter:brightness(1.07)}
+  .ghost:hover{color:var(--text);border-color:var(--btn-line)}
+  .source:hover{border-color:var(--accent-line);background:#171c14}
+}
+.note{font-size:var(--fs-label);line-height:1.5}
+.status{color:var(--muted);font-size:var(--fs-small);margin-top:var(--s4);min-height:20px}
+
+/* Sources: denser grid */
+.sourcegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--s2);margin-top:var(--s4)}
+.source{display:block;border:1px solid var(--line);border-radius:var(--r-sm);padding:10px var(--s3);background:var(--surface-source);font-size:var(--fs-small);transition:border-color .15s var(--ease),background-color .15s var(--ease)}
+.source span{display:block;color:var(--muted);font-size:var(--fs-label)}
+
+/* Result cards: compact rows */
+.result{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);padding:10px var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);margin-top:var(--s2);background:var(--surface-card);animation:rise .18s var(--ease) both}
+.coverline{display:flex;gap:var(--s3);align-items:center;min-width:0;flex:1}
+.coverline>div{min-width:0}
+.cover{width:48px;height:48px;flex:none;object-fit:cover;border-radius:8px}
+.result small{display:block;color:var(--muted);font-size:var(--fs-label);line-height:1.4}
+.result .actions{margin-top:0;flex-wrap:nowrap;flex:none}
+.result .btn{min-height:32px;padding:6px 10px;font-size:var(--fs-small)}
+.result .ghost{border-color:transparent}
+.result [data-use]{background:var(--btn-bg);border-color:var(--btn-line);color:var(--text)}
+#apple .note,#jiosaavn .note,#musicbrainz .note{border-left:2px solid var(--warn);padding-left:var(--s3)}
+
+/* Output */
+.output{min-height:180px;margin-top:var(--s3);font:var(--fs-label)/1.5 var(--mono);resize:vertical}
+
+.footer{margin-top:var(--s6);color:var(--muted);font-size:var(--fs-label);display:flex;justify-content:space-between;gap:var(--s3);flex-wrap:wrap}
+
+@keyframes rise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* Responsive */
+@media(max-width:800px){.layout{grid-template-columns:1fr}}
+@media(max-width:600px){
+  input,select,textarea{font-size:16px}
+  .result{flex-direction:column;align-items:stretch}
+  .result .actions{margin-top:var(--s2)}
+}
+@media(max-width:460px){
+  .shell{padding:22px 14px 48px}
+  .panel{padding:var(--s4)}
+  .row,.formgrid,.sourcegrid{grid-template-columns:1fr}
+  .wide{grid-column:auto}
+  .top{margin-bottom:var(--s5)}
+}
+@media(pointer:coarse){
+  .btn,.result .btn{min-height:44px}
+  input,select{min-height:44px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
 </style></head><body><main class="shell">
 <header class="top"><div class="brand"><span class="mark">♪</span>mixtape <span style="color:var(--muted);font-weight:400">/ metadata assistant</span></div><span class="pill">NO LOGIN · NO API KEYS</span></header>
-<section class="hero"><div class="small">YOUR PERSONAL MUSIC CATALOGUE TOOL</div><h1>Know the song.<br><span style="color:var(--accent)">Find the credits.</span></h1><p>Look up one song at a time, compare public sources, fill in missing credits, and generate Blogger-ready metadata for Mixtape.</p></section>
-<div class="layout"><section class="panel"><h2>Find a song</h2><p class="sub">Enter the title in English transliteration. Choose its language and add an optional clue.</p>
+<section class="hero"><div class="small">YOUR PERSONAL MUSIC CATALOGUE TOOL</div><h1>Know the song. <span style="color:var(--accent)">Find the credits.</span></h1><p>Look up one song at a time, compare public sources, fill in missing credits, and generate Blogger-ready metadata for Mixtape.</p></section>
+<div class="layout"><section class="panel"><div class="small step">Step 1 · Find and check</div><h2>Find a song</h2><p class="sub">Enter the title in English transliteration. Choose its language and add an optional clue.</p>
 <label for="song">Song title</label><input id="song" placeholder="e.g. Varamanjaladiya" autocomplete="off">
 <div class="row"><div><label for="language">Language</label><select id="language"><option value="">Any / Not sure</option><option>Malayalam</option><option>Tamil</option><option>Hindi</option><option>Telugu</option><option>Kannada</option><option>Bengali</option><option>Marathi</option><option>Punjabi</option><option>Other</option></select></div><div><label for="hint">Extra clue</label><input id="hint" placeholder="Film, singer, decade…"></div></div>
 <div class="actions"><button class="btn primary" id="search">Search sources ↗</button><button class="btn ghost" id="clear">Clear</button></div><div class="status" id="status">Live catalogue matches from Apple Music, JioSaavn and MusicBrainz appear here. Other services are available as search links.</div><div id="apple"></div><div id="jiosaavn"></div><div id="musicbrainz"></div><div class="sourcegrid" id="sources"></div><p class="note">A title match is not proof. Check the version, film, singer and credits before accepting details.</p></section>
-<section class="panel"><h2>Song metadata</h2><p class="sub">Fill or correct the details. Missing fields are left blank.</p>
+<section class="panel"><div class="small step">Step 2 · Fill and export</div><h2>Song metadata</h2><p class="sub">Fill or correct the details. Missing fields are left blank.</p>
 <div class="formgrid">
 <div class="wide"><label for="title">Song title</label><input id="title"></div><div class="wide"><label for="artist">Singer(s)</label><input id="artist" placeholder="Separate multiple singers with commas"></div>
 <div><label for="composer">Music director</label><input id="composer"></div><div><label for="lyricist">Lyricist</label><input id="lyricist"></div>
